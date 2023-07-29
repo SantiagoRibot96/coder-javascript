@@ -1,101 +1,101 @@
-/*
-Estructura del if
+/* FUNCIONES */
 
-if(condicion){
-    codigo a ejecutar si es verdadero;
+/*
+
+para declarar: 
+
+function nombreFunction(){
+    codigo a ejecutar
 }
-else{
 
+para invocar:
+
+nombreFunction();
+*/
+
+// function saludar (){
+//     console.log("hola");
+// }
+
+// saludar();
+
+/* 
+
+para declarar: 
+
+function nombreFunction(param1, param2, param3){
+    codigo a ejecutar
 }
+
+para invocar:
+
+nombreFunction(valor1, valor2, valor3)
 */
 
-// if(true){
-//     console.log("no soy caniche pero toy");
-// }
-// else{
-//     console.log("nope");
+// function saludar(saludo, nombre){
+//     console.log(`${saludo}, ${nombre}`);
 // }
 
-/*
-Todos los numeros a excepcion del 0 son true. Todos los string a excepcion de uno vacio son true
+// saludar("hola", "andres");
+// saludar("bienvenido", "lucas");
+
+/* 
+
+return termina la funcion
+
 */
 
-// if(""){
-//     console.log("toy");
+// function sumar(num1, num2){
+//     return(num1 + num2);
 // }
 
-/*
-= asignacion
-== comparacion
-=== igualdad estricta (tanto valor como tipo)
+// let resultado = sumar(3, 2);
+// console.log(resultado);
+
+// function calculadora(num1, num2, operacion){
+//     switch(operacion){
+//         case "+":
+//             return num1 + num2;
+//             break;
+//         case "-":
+//             return num1 - num2;
+//             break;
+//         case "*":
+//             return num1 * num2;
+//             break;
+//         case "/":
+//             return num1 / num2;
+//             break;
+//         default:
+//             return "operacion no soportada";
+//             break;
+//     }
+// }
+
+// let num1 = parseInt(prompt("ingrese un numero"));
+// let num2 = parseInt(prompt("ingrese otro numero"));
+// let resultado;
+// let operacion = prompt("que operacion desea realizar?");
+
+// resultado = calculadora(num1, num2, operacion);
+// alert(resultado);
+
+/* 
+
+arrow function
+
+const nombreFunction = (param1, param2) => codigo;
+
+es como hacer una funcion inline. Contra: como es una constante, tiene que ser declarada antes de ser llamada
+
 */
 
-/*
-"anDReS".toLowerCase();
-*/
+const suma = (a, b) => a + b;
+const resta = (a, b) => a - b;
+const iva = (x) => x * 0.21;
 
-// let nombre = prompt("ingrese su nombre");
+let precioProducto = 1000;
+let descuento = 100;
 
-// if(nombre.toLowerCase() === "miguel")
-// {
-//     alert("bienvenido miguel");
-// }
-// else{
-//     alert("usuario desconocido")
-// }
-
-
-/*
-Estructura del if
-
-if(condicion){
-    codigo a ejecutar si es verdadero;
-}
-else if{
-
-}
-else{
-
-}
-*/
-
-// let edad = parseInt(prompt("Ingrese edad"));
-
-// if(edad >= 18){
-//     alert("Puede ingresar");
-// }
-// else if(edad >= 14){
-//     alert("Puede ingresar con un mayor");
-// }
-// else{
-//     alert("No puede ingresar");
-// }
-
-/*
-isNaN() -> indica si lo que pones dentro es o no es un numero (is Not a Number)
-*/
-
-/*
-Operadores:
-
-AND &&
-OR ||
-not !
-*/
-
-/*
-("hola " + variable) es igual a escribir (`hola ${variable}`) (altgr + cierre de llave)
-*/
-
-// let nombre = prompt("ingese su nombre");
-// let apellido = prompt("ingrese su apellido");
-
-// if(nombre != "" && apellido != "")
-// {
-//     alert(`hola ${nombre} ${apellido}`);
-// }
-// else
-// {
-//     alert("se necesita ingresar nombre y apellido");
-// }
-
+let nuevoPrecio = resta(suma(precioProducto, iva(precioProducto)), descuento);
+console.log(nuevoPrecio);
