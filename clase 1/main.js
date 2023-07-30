@@ -58,4 +58,4 @@ alert(numeroIngresadoUnoCast + numeroIngresadoDosCast);
 
 /*Puedo hacer el casteo de una*/
 
-let numeroCasteado = Number(prompt("Ingrese un numero"));
+let numeroCasteado = Number(prompt("Ingrese un numero"));cd
