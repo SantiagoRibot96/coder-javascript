@@ -68,7 +68,7 @@ while(true && !terminoPrograma){
         break;
     }
 
-    cantidadCuotas = parseFloat(cantidadCuotas);
+    cantidadCuotas = parseInt(cantidadCuotas);
 
     if(validar(cantidadCuotas)){
         break;
