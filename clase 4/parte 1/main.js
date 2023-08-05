@@ -175,4 +175,3 @@ while(nombre != "ESC"){
 
     nombre = prompt("ingrese el nombre del producto a consultar");
 }
-
