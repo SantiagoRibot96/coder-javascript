@@ -61,7 +61,7 @@ while(true && !terminoPrograma){
 
 while(true && !terminoPrograma){
 
-    cantidadCuotas = prompt("Ingrese el valor del producto");
+    cantidadCuotas = prompt("Ingrese la cantidad de cuotas");
 
     if(cantidadCuotas.toLowerCase() === "quit"){
         terminoPrograma = true;
@@ -77,7 +77,7 @@ while(true && !terminoPrograma){
 
 while(true && !terminoPrograma){
 
-    recargo = prompt("Ingrese el valor del producto");
+    recargo = prompt("Ingrese el recargo");
 
     if(recargo.toLowerCase() === "quit"){
         terminoPrograma = true;
