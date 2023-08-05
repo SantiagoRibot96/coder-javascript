@@ -97,6 +97,6 @@ if(terminoPrograma){
     let valorProductoConRecargo = valorProducto*(1+recargo/100);
     let valorDeCuota = valorProductoConRecargo/cantidadCuotas;
     
-    alert(`El valor total del producto financiado es de $${valorProductoConRecargo.toFixed(2)} a pagar en ${cantidadCuotas} de $${valorDeCuota.toFixed(2)}`);
+    alert(`El valor total del producto financiado es de $${valorProductoConRecargo.toFixed(2)} a pagar en ${cantidadCuotas} cuotas de $${valorDeCuota.toFixed(2)}`);
     alert("Refrescar la pagina en caso de querer hacer otra operacion");
 }
