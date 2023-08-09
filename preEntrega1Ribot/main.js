@@ -38,58 +38,34 @@ function validar(valor){
     }
 }
 
+function obtener(pregunta, variable){
+    while(true && !terminoPrograma){
+
+        variable = prompt(pregunta);
+    
+        if(variable.toLowerCase() === "quit"){
+            terminoPrograma = true;
+            break;
+        }
+    
+        variable = parseFloat(variable);
+    
+        if(validar(variable)){
+            break;
+        }
+    }
+
+    return(variable);
+}
+
 let valorProducto;
 let cantidadCuotas;
 let recargo;
-let terminoPrograma = false;
+var terminoPrograma = false; //es un flag global al que necesito que accedan las funciones
 
-while(true && !terminoPrograma){
-
-    valorProducto = prompt("Ingrese el valor del producto");
-
-    if(valorProducto.toLowerCase() === "quit"){
-        terminoPrograma = true;
-        break;
-    }
-
-    valorProducto = parseFloat(valorProducto);
-
-    if(validar(valorProducto)){
-        break;
-    }
-}
-
-while(true && !terminoPrograma){
-
-    cantidadCuotas = prompt("Ingrese la cantidad de cuotas");
-
-    if(cantidadCuotas.toLowerCase() === "quit"){
-        terminoPrograma = true;
-        break;
-    }
-
-    cantidadCuotas = parseInt(cantidadCuotas);
-
-    if(validar(cantidadCuotas)){
-        break;
-    }
-}
-
-while(true && !terminoPrograma){
-
-    recargo = prompt("Ingrese el recargo");
-
-    if(recargo.toLowerCase() === "quit"){
-        terminoPrograma = true;
-        break;
-    }
-
-    recargo = parseFloat(recargo);
-
-    if(validar(recargo)){
-        break;
-    }
-}
+valorProducto = obtener("Ingrese el valor del producto", valorProducto);
+cantidadCuotas = obtener("Ingrese la cantidad de cuotas", cantidadCuotas);
+recargo = obtener("Ingrese el recargo", recargo);
 
 if(terminoPrograma){
     alert("Refrescar la pagina en caso de querer hacer otra operacion");
