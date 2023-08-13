@@ -1,80 +1,72 @@
-// let valorProducto = parseFloat(prompt("Ingrese el valor del producto"));
-// if(!isNaN(valorProducto) && valorProducto > 0)
-// {
-//     /* Quire decir que el valor ingresado es un numero mayor que cero*/
+/* 
+Programa que pide por prompt que ingreses jugadores de futbol y alguna de sus caracteristicas principales. Luego devuelve dos equipos random de futbol 5, balanceados.
 
-//     let cantidadCuotas = parseInt(prompt("Ingrese la cantidad de cuotas deseadas"));
-//     if(!isNaN(cantidadCuotas) && cantidadCuotas > 0){
-//         /* Quire decir que el valor ingresado es un numero mayor que cero*/
+Por dentro los jugadores se guardan en un array y se crean de forma dinamica al ser ingresados.
+*/
 
-//         let recargo = parseFloat(prompt("Ingrese el recargo total que tienen las cuotas en %"));
-//         if(!isNaN(recargo)){
-//             /* Quire decir que el valor ingresado es un numero*/
+class Jugador{
+    constructor(nombre, posicion, promedio){
+        this.nombre = nombre;
+        this.posicion = posicion;
+        this.promedio = promedio;
+    }
+}
 
-//             let valorProductoConRecargo = valorProducto*(1+recargo/100);
-//             let valorDeCuota = valorProductoConRecargo/cantidadCuotas;
+function buscarJugador(){
+    nombreIngresado = prompt("Ingrese el nombre del jugador que desea consultar. En caso de no querer consultar mas puede poner la palabra FIN");
 
-//             alert(`El valor total del producto financiado es de $${valorProductoConRecargo.toFixed(2)} a pagar en ${cantidadCuotas} de $${valorDeCuota.toFixed(3)}`);
-//         }else{
+    while(nombreIngresado.toLowerCase() != "fin"){
+        let jugadorBuscado;
+    
+        for(const item of jugadores){
+            if(item.nombre === nombreIngresado){
+                jugadorBuscado = item;
+            }
+        }
+        
+        if(jugadorBuscado){
+            let mensaje = `
+                Nombre: ${jugadorBuscado.nombre}
+                Posicion: ${jugadorBuscado.posicion}
+                Promedio: ${jugadorBuscado.promedio}
+                `;
+        
+            alert(mensaje);
+        }else{
+            alert("Jugador no encontrado");
+        }
+    
+        nombreIngresado = prompt("Ingrese el nombre del jugador que desea consultar. En caso de no querer consultar mas puede poner la palabra FIN");
+    }
+}
 
-//             alert("No es un numero");
-//         }
-//     }
-//     else{
+const jugadores = [];
 
-//         alert("No es un numero mayor a 0");
-//     }
-// }else{
+alert("El siguiente programa pide por prompt el nombre de un jugador, su posicion y el promedio (del 1 al 10).\n\nEn caso de poner FIN en alguna de las preguntas, el programa termina y la pagina debera ser refrescada");
 
-//     alert("No es un numero mayor a 0");
-// }
+let nombreIngresado = prompt("Ingrese el nombre del jugador");
+let posicionIngresado;
+let promedioIngresado;
 
-function validar(valor){
-    if(!isNaN(valor) && valor > 0){
-        return true;
+while(nombreIngresado.toLowerCase() != "fin"){
+    posicionIngresado = prompt("ingrese la posicion del jugador");
+
+    while(posicionIngresado.toLowerCase() != "fin"){
+        promedioIngresado = prompt("ingrese la calificacion promedio del jugador");
+
+        while(promedioIngresado.toLowerCase() != "fin" && parseFloat(promedioIngresado) >= 1 && parseFloat(promedioIngresado) <= 10){
+            jugadores.push(new Jugador(nombreIngresado, posicionIngresado, promedioIngresado));
+            break;
+        }
+
+        break;
+    }
+
+    if(posicionIngresado.toLowerCase() != "fin" && promedioIngresado.toLowerCase() != "fin"){
+        nombreIngresado = prompt("Ingrese el nombre del jugador. Recuerde que si no quiere añadir mas jugadores puede poner la palabra FIN");
     }else{
-        alert("No es un numero mayor a 0");
-        return false;
+        break;
     }
 }
 
-function obtener(pregunta){
-    let variable;
-
-    while(true && !terminoPrograma){
-
-        variable = prompt(pregunta);
-    
-        if(variable.toLowerCase() === "quit"){
-            terminoPrograma = true;
-            break;
-        }
-    
-        variable = parseFloat(variable);
-    
-        if(validar(variable)){
-            break;
-        }
-    }
-
-    return(variable);
-}
-
-let valorProducto;
-let cantidadCuotas;
-let recargo;
-let terminoPrograma = false; //es un flag global al que necesito que accedan las funciones
-
-valorProducto = obtener("Bienvenido al programa de cuotas. Ingrese quit para terminar el programa\n\nIngrese el valor del producto");
-cantidadCuotas = obtener("Ingrese la cantidad de cuotas");
-recargo = obtener("Ingrese el recargo");
-
-if(terminoPrograma){
-    alert("Refrescar la pagina en caso de querer hacer otra operacion");
-}else{
-    let valorProductoConRecargo = valorProducto*(1+recargo/100);
-    let valorDeCuota = valorProductoConRecargo/cantidadCuotas;
-    
-    alert(`El valor total del producto financiado es de $${valorProductoConRecargo.toFixed(2)} a pagar en ${cantidadCuotas} cuotas de $${valorDeCuota.toFixed(2)}`);
-    alert("Refrescar la pagina en caso de querer hacer otra operacion");
-}
+buscarJugador();
