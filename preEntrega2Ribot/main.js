@@ -244,6 +244,7 @@ Inicio del programa
 
 
 
+alert(`El siguente programa tiene la capacidad de realizar dos equipos de futbol 5 de forma aleatoria, teniendo en cuenta la posicion donde juegan y su calificacion para obtener un partido parejo`);
 const jugadores = [];
 
 jugadores.push(new Jugador("Ronaldo", "DEL", 9));
