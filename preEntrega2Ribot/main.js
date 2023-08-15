@@ -11,7 +11,7 @@ Por dentro los jugadores se guardan en un array y se crean de forma dinamica al 
 
 /* 
 ///////////////////////////////////////////////////////////////////////////////////
-Declaraciones
+Declaracion de funciones
 ///////////////////////////////////////////////////////////////////////////////////
 */
 
@@ -53,7 +53,7 @@ function buscarJugador(){
                 Nombre: ${jugadorBuscado.nombre}
                 Posicion: ${jugadorBuscado.posicion}
                 Promedio: ${jugadorBuscado.promedio}
-                Seed: ${jugadorBuscado.equipo}
+                Equipo: ${jugadorBuscado.equipo}
                 `;
         
             alert(mensaje);
@@ -92,6 +92,9 @@ function mostrarJugadores(){
 }
 
 function mostrarEquipos(){
+
+    ordenar();
+
     let mensaje = `
     Equipo A
     Nombre:     ${jugadores[0].nombre}     ${jugadores[1].nombre}      ${jugadores[2].nombre}      ${jugadores[3].nombre}      ${jugadores[4].nombre}
@@ -172,6 +175,53 @@ function hallarEquipo(){
     }
 }
 
+function agregarJugador(){
+
+    alert(`Se pueden añadir hasta 10 jugadores.La cantidad actual de jugadores es: ${jugadores.length}`);
+
+    let nombreIngresado = prompt("Ingrese el nombre del jugador. En caso de no querer ingresar un nuevo jugador escriba FIN");
+    let posicionIngresado;
+    let promedioIngresado;
+    
+    while(nombreIngresado.toLowerCase() != "fin" && jugadores.length < 10){
+        posicionIngresado = prompt("ingrese la posicion del jugador (DEL, CEN, DEF)");
+    
+        while(posicionIngresado.toLowerCase() != "del" && posicionIngresado.toLowerCase() != "def" && posicionIngresado.toLowerCase() != "cen"){//validacion de entrada
+            posicionIngresado = prompt("Por favor, escoja una posicion entre DEL, CEN o DEF");
+        }
+    
+        while(true){
+            promedioIngresado = prompt("ingrese la calificacion promedio del jugador (del 1 al 10)");
+    
+            while(!(parseFloat(promedioIngresado) >= 1 && parseFloat(promedioIngresado) <= 10)){//Validacion de entrada
+                promedioIngresado = prompt("Por favor, ingrese un numero del 1 al 10");
+            }
+    
+            jugadores.push(new Jugador(nombreIngresado, posicionIngresado, parseFloat(promedioIngresado)));
+            break;
+        }
+    
+        if(jugadores.length < 10){
+            nombreIngresado = prompt(`Ingrese el nombre del jugador. Recuerde que si no quiere añadir mas jugadores puede poner la palabra FIN. La cantidad de jugadores ingresada es de ${jugadores.length}`);
+        }else{
+            break;
+        }
+    }
+
+    if(jugadores.length === 10){
+        alert("Cantidad maxima de jugadores ingresados");
+    }
+}
+
+function eliminarJugador(nombreJugador){
+    alert(`${jugadores.indexOf(nombreJugador)} ${nombreJugador}`);
+    if(jugadores.indexOf(nombreJugador) > -1){
+        jugadores.splice(jugadores.indexOf(nombreJugador), 1);
+        alert(`Se ha eliminado el jugador ${nombreJugador} de la plantilla`);
+    }else{
+        alert(`El jugador ${nombreJugador} no fue encontrado. Recuerde que el sistema es sencible a las mayusculas`);
+    }
+}
 
 
 
@@ -189,8 +239,6 @@ Inicio del programa
 
 const jugadores = [];
 
-alert("El siguiente programa pide por prompt el nombre de un jugador, su posicion (DEL, CEN, DEF) y el promedio (del 1 al 10).\n\nEn caso de poner FIN, la carga de jugadores termina. Se pueden añadir hasta 10 jugadores");
-
 jugadores.push(new Jugador("Ronaldo", "DEL", 9));
 jugadores.push(new Jugador("Riquelme", "CEN", 8));
 jugadores.push(new Jugador("Messi", "DEL", 10));
@@ -201,43 +249,71 @@ jugadores.push(new Jugador("Pepe", "DEL", 4));
 jugadores.push(new Jugador("Carlos", "DEF", 5));
 jugadores.push(new Jugador("Juan", "CEN", 2));
 
-if(!(prompt(`Desea utilizar los ${jugadores.length} precargados? S/N`).toLowerCase() === "s")){
+let respuesta = prompt(`Desea utilizar los ${jugadores.length} precargados? S/N`).toLowerCase();
 
-    while(jugadores.length > 0){
-        jugadores.pop();
-    }
-}
+while(true){
+    if( respuesta === "n"){
 
-let nombreIngresado = prompt("Ingrese el nombre del jugador");
-let posicionIngresado;
-let promedioIngresado;
-
-while(nombreIngresado.toLowerCase() != "fin"){
-    posicionIngresado = prompt("ingrese la posicion del jugador (DEL, CEN, DEF)");
-
-    while(posicionIngresado.toLowerCase() != "del" && posicionIngresado.toLowerCase() != "def" && posicionIngresado.toLowerCase() != "cen"){//validacion de entrada
-        posicionIngresado = prompt("Por favor, escoja una posicion entre DEL, CEN o DEF");
-    }
-
-    while(true){
-        promedioIngresado = prompt("ingrese la calificacion promedio del jugador (del 1 al 10)");
-
-        while(!(parseFloat(promedioIngresado) >= 1 && parseFloat(promedioIngresado) <= 10)){//Validacion de entrada
-            promedioIngresado = prompt("Por favor, ingrese un numero del 1 al 10");
+        while(jugadores.length > 0){
+            jugadores.pop();
         }
-
-        jugadores.push(new Jugador(nombreIngresado, posicionIngresado, parseFloat(promedioIngresado)));
+    }else if(respuesta === "s"){
         break;
-    }
-
-    if(jugadores.length < 10){
-        nombreIngresado = prompt(`Ingrese el nombre del jugador. Recuerde que si no quiere añadir mas jugadores puede poner la palabra FIN. La cantidad de jugadores ingresada es de ${jugadores.length}`);
     }else{
-        break;
+        respuesta = prompt(`Desea utilizar los ${jugadores.length} precargados? S/N`).toLowerCase();
     }
 }
 
-hallarEquipo();
-ordenar();
-mostrarJugadores();
-mostrarEquipos();
+while(respuesta){
+
+    respuesta = prompt(`
+    Que desea hacer?
+    1)Agregar un jugador nuevo
+    2)Eliminar un jugador de la plantilla
+    3)Buscar un jugador en la plantilla
+    4)Hallar un equipo al azar con la plantilla actual
+    5)Mostrar los jugadores de la plantilla
+    6)Mostrar los dos equipos generados
+    7)Terminar el programa
+
+    Cantidad de jugadores: ${jugadores.length}
+    `);
+
+    switch (parseInt(respuesta)) {
+        case 1:
+            agregarJugador();
+            break;
+    
+        case 2:
+            let nombreJugadorEliminado = prompt("Ingrese el nombre del jugador a eliminar. El sistema reconoce las mayusculas!");
+            eliminarJugador(nombreJugadorEliminado);
+            break;
+    
+        case 3:
+            buscarJugador();
+            break;
+    
+        case 4:
+            hallarEquipo();
+            break;
+    
+        case 5:
+            mostrarJugadores();
+            break;
+    
+        case 6:
+            mostrarEquipos();
+            break;
+
+        case 7:
+            if(prompt("Seguro desea terminar? Su progreso sera eliminado. S/N").toLowerCase() === "s"){
+                respuesta = false;
+            }
+            break;
+    
+        default:
+
+            break;
+    }
+
+}
