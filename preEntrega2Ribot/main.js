@@ -37,32 +37,29 @@ class Jugador{
 }
 
 function buscarJugador(){
-    nombreIngresado = prompt("Ingrese el nombre del jugador que desea consultar. En caso de no querer consultar mas puede poner la palabra FIN");
+    nombreIngresado = prompt("Ingrese el nombre del jugador que desea consultar");
 
-    while(nombreIngresado.toLowerCase() != "fin"){
-        let jugadorBuscado;
-    
-        for(const item of jugadores){
-            if(item.nombre === nombreIngresado){
-                jugadorBuscado = item;
-            }
+    let jugadorBuscado;
+
+    for(const item of jugadores){
+        if(item.nombre === nombreIngresado){
+            jugadorBuscado = item;
         }
-        
-        if(jugadorBuscado){
-            let mensaje = `
-                Nombre: ${jugadorBuscado.nombre}
-                Posicion: ${jugadorBuscado.posicion}
-                Promedio: ${jugadorBuscado.promedio}
-                Equipo: ${jugadorBuscado.equipo}
-                `;
-        
-            alert(mensaje);
-        }else{
-            alert("Jugador no encontrado");
-        }
-    
-        nombreIngresado = prompt("Ingrese el nombre del jugador que desea consultar. En caso de no querer consultar mas puede poner la palabra FIN");
     }
+    
+    if(jugadorBuscado){
+        let mensaje = `
+            Nombre: ${jugadorBuscado.nombre}
+            Posicion: ${jugadorBuscado.posicion}
+            Promedio: ${jugadorBuscado.promedio}
+            Equipo: ${jugadorBuscado.equipo}
+            `;
+    
+        alert(mensaje);
+    }else{
+        alert("Jugador no encontrado");
+    }
+    
 }
 
 function ordenar(){
@@ -214,13 +211,23 @@ function agregarJugador(){
 }
 
 function eliminarJugador(nombreJugador){
-    alert(`${jugadores.indexOf(nombreJugador)} ${nombreJugador}`);
-    if(jugadores.indexOf(nombreJugador) > -1){
-        jugadores.splice(jugadores.indexOf(nombreJugador), 1);
-        alert(`Se ha eliminado el jugador ${nombreJugador} de la plantilla`);
-    }else{
-        alert(`El jugador ${nombreJugador} no fue encontrado. Recuerde que el sistema es sencible a las mayusculas`);
-    }
+
+        let indice = 0;
+    
+        for(const item of jugadores){
+            if(item.nombre != nombreJugador){
+                indice++;
+            }else{
+                break;
+            }
+        }
+
+        if(indice === jugadores.length){
+            alert(`El jugador ${nombreJugador} no se encuentra en la plantilla`);
+        }else{
+            jugadores.splice(indice, 1);
+            alert(`El jugador ${nombreJugador} fue eliminado de la plantilla`);
+        }
 }
 
 
