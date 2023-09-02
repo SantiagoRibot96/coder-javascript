@@ -288,48 +288,104 @@ function guardarJugadores(){
 
 function recuperarJugadores(){
 
-    let rr = prompt("Desea recuperar los jugadores de una sesion pasada? S/N");
-    let jugadoresStorage = [];
+    let div = document.getElementById("recupero");
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <h2>Desea recuperar los jugadores de una sesion pasada?</h2>
+    <button id="botonSi">SI</button>
+    <button id="botonNo">NO</button>
+    `;
+    div.append(mensaje);
 
-    if(rr.toLowerCase() === "s"){
+    let botonSi = document.getElementById("botonSi");
+    let botonNo = document.getElementById("botonNo");
+
+    botonSi.onclick = () => {
         jugadoresStorage = localStorage.getItem(usuarioActual);
 
         if(jugadoresStorage != null){
             jugadores = JSON.parse(jugadoresStorage);
+            mensaje.innerHTML = `
+            <h2>Jugadores cargados</h2>
+            `;
+            div.append(mensaje);
         }else{
-            alert("No hay jugadores de sesiones anteriores");
+            mensaje.innerHTML = `
+            <h2>No hay jugadores de sesiones anteriores</h2>
+            `;
+            div.append(mensaje);
         }
-    }
+    };
+    botonNo.onclick = () => {
+        mensaje.innerHTML = `
+        <h2>No se han recuperado jugadores de sesiones anteriores</h2>
+        `;
+        div.append(mensaje);
+        div.remove();
+    };
 }
 
 function login(){
     let usuariosStorage = localStorage.getItem("usuarios");
 
-    usuarioActual = prompt("Ingrese el usuario");
+    let div = document.getElementById("login");
+    div.innerHTML = "";
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <h2>Ingrese su usuario</h2>
+    <form id="formularioUsuario">
+        <input type="text">
+        <input type="submit">
+    </form>
+    `;
+    div.append(mensaje);
 
-    if(usuariosStorage === null){
-        alert("Bienvenido primer usuario!");
-        usuarios.push(usuarioActual);
-    }
-    else{
-        usuarios = JSON.parse(usuariosStorage);
-        let cont = 0;
+    let formularioUsuario = document.getElementById("formularioUsuario");
 
-        while(usuarios[cont] != usuarioActual && cont < usuarios.length){
-            cont++;
+    formularioUsuario.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let inputs = e.target.children;
+
+        if(inputs[0].value != null){
+            usuarioActual = inputs[0].value;
         }
-    
-        if(usuarios[cont] === usuarioActual){
-            alert("Bienvenido nuevamente");
-            recuperarJugadores();
-        }else{
-            alert("Bienvenido nuevo usuario");
+
+        if(usuariosStorage === null){
+            mensaje.innerHTML = `
+            <h2>Eres el primer usuario! Bienvenido ${usuarioActual}</h2>
+            `;
+            div.append(mensaje);
             usuarios.push(usuarioActual);
         }
-    }
-
-    sessionStorage.setItem("usuarioActual", usuarioActual);
-    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+        else{
+            usuarios = JSON.parse(usuariosStorage);
+            let cont = 0;
+    
+            while(usuarios[cont] != usuarioActual && cont < usuarios.length){
+                cont++;
+            }
+        
+            if(usuarios[cont] === usuarioActual){
+                mensaje.innerHTML = `
+                <h2>Bienvenido nuevamente ${usuarioActual}</h2>
+                <div id="recupero"></div>
+                `;
+                div.append(mensaje);
+                recuperarJugadores();
+            }else{
+                mensaje.innerHTML = `
+                <h2>Bienvenido por primera vez ${usuarioActual}</h2>
+                `;
+                div.append(mensaje);
+                usuarios.push(usuarioActual);
+            }
+        }
+    
+        sessionStorage.setItem("usuarioActual", usuarioActual);
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+        loggedIn = true;
+    });
 }
 
 
@@ -345,71 +401,78 @@ Inicio del programa
 
 
 
-alert(`El siguente programa tiene la capacidad de realizar dos equipos de futbol 5 de forma aleatoria, teniendo en cuenta la posicion donde juegan y su calificacion para obtener un partido parejo`);
 let jugadores = [];
 let usuarios = [];
 let usuarioActual;
+let loggedIn = false;
 
 login();
 
-let respuesta = "roman";
+let div = document.getElementById("menu");
+let mensaje = document.createElement("P");
+mensaje.innerHTML = `
+<h2>Cantidad de jugadores: ${jugadores.length}</h2>
+<h3>Que desea hacer?</h3>
+<select id="opcionesMenu">
+    <option value="1">Agregar un jugador nuevo</option>
+    <option value="2">Eliminar un jugador de la plantilla</option>
+    <option value="3">Buscar un jugador en la plantilla</option>
+    <option value="4">Hallar un equipo al azar con la plantilla actual</option>
+    <option value="5">Mostrar los jugadores de la plantilla</option>
+    <option value="6">Mostrar los dos equipos generados</option>
+    <option value="7">Rellenar con jugadores predeterminados</option>
+    <option value="8">Cerrar sesion</option>
+</select>
+`;
+div.append(mensaje);
 
-while(respuesta){
+let opcionesMenu = document.getElementById("opcionesMenu");
 
-    respuesta = prompt(`
-    Que desea hacer?
-    1)Agregar un jugador nuevo
-    2)Eliminar un jugador de la plantilla
-    3)Buscar un jugador en la plantilla
-    4)Hallar un equipo al azar con la plantilla actual
-    5)Mostrar los jugadores de la plantilla
-    6)Mostrar los dos equipos generados
-    7)Rellenar con jugadores predeterminados
-    8)Terminar el programa
+opcionesMenu.addEventListener("click", () => {
 
-    Cantidad de jugadores: ${jugadores.length}
-    `);
+    opcionesMenu.addEventListener("change", () => {
 
-    switch (parseInt(respuesta)) {
-        case 1:
-            agregarJugador();
-            break;
+        switch (opcionesMenu.value) {
+            case "1":
+                agregarJugador();
+                break;
+        
+            case "2":
+                let nombreJugadorEliminado = prompt("Ingrese el nombre del jugador a eliminar. El sistema reconoce las mayusculas!");
+                eliminarJugador(nombreJugadorEliminado);
+                break;
+        
+            case "3":
+                buscarJugador();
+                break;
+        
+            case "4":
+                hallarEquipo();
+                break;
+        
+            case "5":
+                mostrarJugadores();
+                break;
+        
+            case "6":
+                mostrarEquipos();
+                break;
     
-        case 2:
-            let nombreJugadorEliminado = prompt("Ingrese el nombre del jugador a eliminar. El sistema reconoce las mayusculas!");
-            eliminarJugador(nombreJugadorEliminado);
-            break;
+            case "7":
+                crearJugadoresPredeterminados(10-jugadores.length);
+                break;
     
-        case 3:
-            buscarJugador();
-            break;
-    
-        case 4:
-            hallarEquipo();
-            break;
-    
-        case 5:
-            mostrarJugadores();
-            break;
-    
-        case 6:
-            mostrarEquipos();
-            break;
+            case "8":
+                if(prompt("Desea guardar su progreso? S/N").toLowerCase() === "s"){
+                    guardarJugadores();
+                }
 
-        case 7:
-            crearJugadoresPredeterminados(10-jugadores.length);
-            break;
-
-        case 8:
-            if(prompt("Desea guardar su progreso? S/N").toLowerCase() === "s"){
-                guardarJugadores();
-            }
-            respuesta = false;
-            break;
+                login();
+                break;
+        
+            default:
     
-        default:
-
-            break;
-    }
-
-}
+                break;
+        }
+    });
+});
