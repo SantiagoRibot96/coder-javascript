@@ -19,6 +19,11 @@ Por dentro los jugadores se guardan en un array y se crean de forma dinamica al 
 -Modificar funcion ordenar para que sirva para cualquier array y no solo para este caso en especifico (sugerido)
 */
 
+/* 
+BUG REPORT:
+    -Funcion agregarJugador: Cuando haces click en finalizar se agrega un jugador de más
+*/
+
 
 
 
@@ -35,7 +40,7 @@ Declaracion de funciones
 
 
 class Jugador{
-    constructor(usuario, nombre, posicion, promedio){
+    constructor(nombre, posicion, promedio){
         this.nombre = nombre;
         this.posicion = posicion;
         this.promedio = promedio;
@@ -189,45 +194,80 @@ function hallarEquipo(){
 
 function agregarJugador(){
 
-    alert(`Se pueden añadir hasta 10 jugadores.La cantidad actual de jugadores es: ${jugadores.length}`);
+    let div = document.getElementById("funciones");
+    div.innerHTML = "";
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <h2 id="funcionesH2">Se pueden añadir hasta 10 jugadores. La cantidad actual de jugadores es: ${jugadores.length}</h2>
+    <form id="formularioJugador">
+        <input type="text" placeholder="Nombre">
+        <select id="opcionesJugador">
+            <option selected>Elija una opcion...</option>
+            <option value="DEF">DEF</option>
+            <option value="CEN">CEN</option>
+            <option value="DEL">DEL</option>
+        </select>
+        <input type="text" placeholder="Calificacion">
+        <input type="submit">
+        <button id="botonFin">Finalizar</button>
+    </form>
+    `;
+    div.append(mensaje);
 
     if(jugadores.length >= 10){
-        alert("Cantidad maxima de jugadores ingresados");
-        return;
+        mensaje.innerHTML = `
+        <h2>Se pueden añadir hasta 10 jugadores.La cantidad actual de jugadores es: ${jugadores.length}</h2>
+        <h3>Se ha alcanzado la cantidad maxima de jugadores</h3>
+        <button id="botonOk">OK</button>
+        `;
+        div.append(mensaje);
+
+        let botonOk = document.getElementById("botonOk");
+
+        botonOk.onclick = () => {
+            location.reload(true);
+        };
     }
 
-    let nombreIngresado = prompt("Ingrese el nombre del jugador. En caso de no querer ingresar un nuevo jugador escriba FIN");
+    let formularioJugador = document.getElementById("formularioJugador");
+    let botonFin = document.getElementById("botonFin");
+    let funcionesH2 = document.getElementById("funcionesH2");
+    let nombreIngresado;
     let posicionIngresado;
     let promedioIngresado;
-    
-    while(nombreIngresado.toLowerCase() != "fin" && jugadores.length < 10){
-        posicionIngresado = prompt("ingrese la posicion del jugador (DEL, CEN, DEF)");
-    
-        while(posicionIngresado.toLowerCase() != "del" && posicionIngresado.toLowerCase() != "def" && posicionIngresado.toLowerCase() != "cen"){//validacion de entrada
-            posicionIngresado = prompt("Por favor, escoja una posicion entre DEL, CEN o DEF");
-        }
-    
-        while(true){
-            promedioIngresado = prompt("ingrese la calificacion promedio del jugador (del 1 al 10)");
-    
-            while(!(parseFloat(promedioIngresado) >= 1 && parseFloat(promedioIngresado) <= 10)){//Validacion de entrada
-                promedioIngresado = prompt("Por favor, ingrese un numero del 1 al 10");
-            }
-    
-            jugadores.push(new Jugador(nombreIngresado, posicionIngresado, parseFloat(promedioIngresado)));
-            break;
-        }
-    
-        if(jugadores.length < 10){
-            nombreIngresado = prompt(`Ingrese el nombre del jugador. Recuerde que si no quiere añadir mas jugadores puede poner la palabra FIN. La cantidad de jugadores ingresada es de ${jugadores.length}`);
-        }else{
-            break;
-        }
-    }
 
-    if(jugadores.length === 10){
-        alert("Cantidad maxima de jugadores ingresados");
-    }
+    formularioJugador.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let inputs = e.target.children;
+
+        nombreIngresado = inputs[0].value;
+        posicionIngresado = inputs[1].value;
+        promedioIngresado = inputs[2].value;
+
+        if(jugadores.length >= 10){
+            mensaje.innerHTML = `
+            <h3>Se ha alcanzado la cantidad maxima de jugadores</h3>
+            <button id="botonOk">OK</button>
+            `;
+            div.append(mensaje);
+    
+            let botonOk = document.getElementById("botonOk");
+    
+            botonOk.onclick = () => {
+                location.reload(true);
+            };
+        }else{
+            jugadores.push(new Jugador(nombreIngresado, posicionIngresado, parseFloat(promedioIngresado)));
+            sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+            funcionesH2.innerHTML = `Se pueden añadir hasta 10 jugadores. La cantidad actual de jugadores es: ${jugadores.length}`;
+            formularioJugador.reset();
+        }
+    });
+
+    botonFin.onclick = () => {
+        location.reload();
+    };
 }
 
 function eliminarJugador(nombreJugador){
@@ -282,7 +322,6 @@ Funciones correspondientes a la preEntrega3 propiamente dicho
 */
 
 function guardarJugadores(){
-
     localStorage.setItem(usuarioActual, JSON.stringify(jugadores));
 }
 
@@ -305,23 +344,45 @@ function recuperarJugadores(){
 
         if(jugadoresStorage != null){
             jugadores = JSON.parse(jugadoresStorage);
+            sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
             mensaje.innerHTML = `
-            <h2>Jugadores cargados</h2>
+            <h2>Jugadores cargados <button id="botonOk">OK</button></h2>
             `;
             div.append(mensaje);
+    
+            let botonOk = document.getElementById("botonOk");
+    
+            botonOk.onclick = () => {
+                location.reload(true);
+            };
         }else{
             mensaje.innerHTML = `
-            <h2>No hay jugadores de sesiones anteriores</h2>
+            <h2>No hay jugadores de sesiones anteriores <button id="botonOk">OK</button></h2>
             `;
             div.append(mensaje);
+
+            jugadores = [];
+            sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+            let botonOk = document.getElementById("botonOk");
+    
+            botonOk.onclick = () => {
+                location.reload(true);
+            };
         }
     };
     botonNo.onclick = () => {
         mensaje.innerHTML = `
-        <h2>No se han recuperado jugadores de sesiones anteriores</h2>
+        <h2>No se han recuperado jugadores de sesiones anteriores <button id="botonOk">OK</button></h2>
         `;
         div.append(mensaje);
-        div.remove();
+
+        jugadores = [];
+        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+        let botonOk = document.getElementById("botonOk");
+
+        botonOk.onclick = () => {
+            location.reload(true);
+        };
     };
 }
 
@@ -353,10 +414,22 @@ function login(){
 
         if(usuariosStorage === null){
             mensaje.innerHTML = `
-            <h2>Eres el primer usuario! Bienvenido ${usuarioActual}</h2>
+            <h2>Eres el primer usuario! Bienvenido ${usuarioActual} <button id="botonOk">OK</button></h2>
             `;
             div.append(mensaje);
-            usuarios.push(usuarioActual);
+
+            let botonOk = document.getElementById("botonOk");
+
+            botonOk.onclick = () => {
+                usuarios.push(usuarioActual);
+                sessionStorage.setItem("usuarioActual", usuarioActual);
+                localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                loggedIn = true;
+                sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
+                jugadoresTemp = [];
+                sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadoresTemp));
+                location.reload(true);
+            };
         }
         else{
             usuarios = JSON.parse(usuariosStorage);
@@ -372,19 +445,28 @@ function login(){
                 <div id="recupero"></div>
                 `;
                 div.append(mensaje);
+                sessionStorage.setItem("usuarioActual", usuarioActual);
+                loggedIn = true;
+                sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
                 recuperarJugadores();
             }else{
                 mensaje.innerHTML = `
-                <h2>Bienvenido por primera vez ${usuarioActual}</h2>
+                <h2>Bienvenido por primera vez ${usuarioActual} <button id="botonOk">OK</button></h2>
                 `;
                 div.append(mensaje);
-                usuarios.push(usuarioActual);
+    
+                let botonOk = document.getElementById("botonOk");
+    
+                botonOk.onclick = () => {
+                    usuarios.push(usuarioActual);
+                    sessionStorage.setItem("usuarioActual", usuarioActual);
+                    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+                    loggedIn = true;
+                    sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
+                    location.reload(true);
+                };
             }
         }
-    
-        sessionStorage.setItem("usuarioActual", usuarioActual);
-        localStorage.setItem("usuarios", JSON.stringify(usuarios));
-        loggedIn = true;
     });
 }
 
@@ -401,78 +483,89 @@ Inicio del programa
 
 
 
-let jugadores = [];
+let jugadores = JSON.parse(sessionStorage.getItem("jugadoresActual"));
 let usuarios = [];
-let usuarioActual;
-let loggedIn = false;
+let usuarioActual = sessionStorage.getItem("usuarioActual");
+let loggedIn = JSON.parse(sessionStorage.getItem("loggedIn"));
 
-login();
-
-let div = document.getElementById("menu");
-let mensaje = document.createElement("P");
-mensaje.innerHTML = `
-<h2>Cantidad de jugadores: ${jugadores.length}</h2>
-<h3>Que desea hacer?</h3>
-<select id="opcionesMenu">
-    <option value="1">Agregar un jugador nuevo</option>
-    <option value="2">Eliminar un jugador de la plantilla</option>
-    <option value="3">Buscar un jugador en la plantilla</option>
-    <option value="4">Hallar un equipo al azar con la plantilla actual</option>
-    <option value="5">Mostrar los jugadores de la plantilla</option>
-    <option value="6">Mostrar los dos equipos generados</option>
-    <option value="7">Rellenar con jugadores predeterminados</option>
-    <option value="8">Cerrar sesion</option>
-</select>
-`;
-div.append(mensaje);
-
-let opcionesMenu = document.getElementById("opcionesMenu");
-
-opcionesMenu.addEventListener("click", () => {
-
-    opcionesMenu.addEventListener("change", () => {
-
-        switch (opcionesMenu.value) {
-            case "1":
-                agregarJugador();
-                break;
-        
-            case "2":
-                let nombreJugadorEliminado = prompt("Ingrese el nombre del jugador a eliminar. El sistema reconoce las mayusculas!");
-                eliminarJugador(nombreJugadorEliminado);
-                break;
-        
-            case "3":
-                buscarJugador();
-                break;
-        
-            case "4":
-                hallarEquipo();
-                break;
-        
-            case "5":
-                mostrarJugadores();
-                break;
-        
-            case "6":
-                mostrarEquipos();
-                break;
+if (loggedIn){
+    let div = document.getElementById("menu");
+    let mensaje = document.createElement("P");
+    mensaje.innerHTML = `
+    <h2>Cantidad de jugadores: ${jugadores.length}</h2>
+    <h3>Que desea hacer?</h3>
+    <select id="opcionesMenu">
+        <option selected>Elija una opcion...</option>
+        <option value="1">Agregar un jugador nuevo</option>
+        <option value="2">Eliminar un jugador de la plantilla</option>
+        <option value="3">Buscar un jugador en la plantilla</option>
+        <option value="4">Hallar un equipo al azar con la plantilla actual</option>
+        <option value="5">Mostrar los jugadores de la plantilla</option>
+        <option value="6">Mostrar los dos equipos generados</option>
+        <option value="7">Rellenar con jugadores predeterminados</option>
+        <option value="8">Cerrar sesion</option>
+    </select>
+    `;
+    div.append(mensaje);
     
-            case "7":
-                crearJugadoresPredeterminados(10-jugadores.length);
-                break;
+    let opcionesMenu = document.getElementById("opcionesMenu");
     
-            case "8":
-                if(prompt("Desea guardar su progreso? S/N").toLowerCase() === "s"){
-                    guardarJugadores();
-                }
-
-                login();
-                break;
+    opcionesMenu.addEventListener("click", () => {
+    
+        opcionesMenu.addEventListener("change", () => {
+    
+            switch (opcionesMenu.value) {
+                case "1":
+                    agregarJugador();
+                    break;
+            
+                case "2":
+                    let nombreJugadorEliminado = prompt("Ingrese el nombre del jugador a eliminar. El sistema reconoce las mayusculas!");
+                    eliminarJugador(nombreJugadorEliminado);
+                    break;
+            
+                case "3":
+                    buscarJugador();
+                    break;
+            
+                case "4":
+                    hallarEquipo();
+                    break;
+            
+                case "5":
+                    mostrarJugadores();
+                    break;
+            
+                case "6":
+                    mostrarEquipos();
+                    break;
         
-            default:
-    
-                break;
-        }
+                case "7":
+                    crearJugadoresPredeterminados(10-jugadores.length);
+                    sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+                    break;
+        
+                case "8":
+                    if(prompt("Desea guardar su progreso? S/N").toLowerCase() === "s"){
+                        guardarJugadores();
+                    }
+                    
+                    div.innerHTML = "";
+                    loggedIn = false;
+                    sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
+                    usuarioActual = "";
+                    sessionStorage.setItem("usuarioActual", usuarioActual);
+                    jugadores = [];
+                    sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+                    location.reload();
+                    break;
+            
+                default:
+        
+                    break;
+            }
+        });
     });
-});
+}else{
+    login();
+}
