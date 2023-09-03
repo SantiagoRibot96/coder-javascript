@@ -22,6 +22,7 @@ Por dentro los jugadores se guardan en un array y se crean de forma dinamica al 
 /* 
 BUG REPORT:
     -Funcion agregarJugador: Cuando haces click en finalizar se agrega un jugador de más
+        --sospecho que es un comportamiento no buscado del metodo formulario.reset(). Por eso se repite en otras funciones
 */
 
 
@@ -270,24 +271,53 @@ function agregarJugador(){
     };
 }
 
-function eliminarJugador(nombreJugador){
+function eliminarJugador(){
 
-        let indice = 0;
-    
+    let div = document.getElementById("funciones");
+    div.innerHTML = "";
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <h2 id="funcionesH2"></h2>
+    <form id="formularioJugador">
+        <input type="text" placeholder="Nombre del jugador">
+        <input type="submit">
+        <button id="botonFin">Finalizar</button>
+    </form>
+    `;
+    div.append(mensaje);
+
+    let formularioJugador = document.getElementById("formularioJugador");
+    let botonFin = document.getElementById("botonFin");
+    let funcionesH2 = document.getElementById("funcionesH2");
+    let indice = 0;
+
+    formularioJugador.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let inputs = e.target.children;
+
         for(const item of jugadores){
-            if(item.nombre != nombreJugador){
+            if(item.nombre != inputs[0].value){
                 indice++;
             }else{
                 break;
             }
         }
-
+    
         if(indice === jugadores.length){
-            alert(`El jugador ${nombreJugador} no se encuentra en la plantilla`);
+            funcionesH2.innerHTML = `El jugador ${inputs[0].value} no se encuentra en la plantilla`;
         }else{
             jugadores.splice(indice, 1);
-            alert(`El jugador ${nombreJugador} fue eliminado de la plantilla`);
+            funcionesH2.innerHTML = `El jugador ${inputs[0].value} fue eliminado`;
         }
+
+        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+        formularioJugador.reset();
+    });
+
+    botonFin.onclick = () => {
+        location.reload();
+    };
 }
 
 function crearJugadoresPredeterminados(cantidad){
@@ -520,8 +550,7 @@ if (loggedIn){
                     break;
             
                 case "2":
-                    let nombreJugadorEliminado = prompt("Ingrese el nombre del jugador a eliminar. El sistema reconoce las mayusculas!");
-                    eliminarJugador(nombreJugadorEliminado);
+                    eliminarJugador();
                     break;
             
                 case "3":
@@ -546,18 +575,36 @@ if (loggedIn){
                     break;
         
                 case "8":
-                    if(prompt("Desea guardar su progreso? S/N").toLowerCase() === "s"){
+                    mensaje.innerHTML = `
+                    Desea guardar antes de salir?
+                    <button id="botonSi">SI</button>
+                    <button id="botonNo">NO</button>
+                    `;
+                    div.append(mensaje);
+                
+                    let botonSi = document.getElementById("botonSi");
+                    let botonNo = document.getElementById("botonNo");
+                    botonSi.onclick = () => {
                         guardarJugadores();
-                    }
-                    
-                    div.innerHTML = "";
-                    loggedIn = false;
-                    sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
-                    usuarioActual = "";
-                    sessionStorage.setItem("usuarioActual", usuarioActual);
-                    jugadores = [];
-                    sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
-                    location.reload();
+                        div.innerHTML = "";
+                        loggedIn = false;
+                        sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
+                        usuarioActual = "";
+                        sessionStorage.setItem("usuarioActual", usuarioActual);
+                        jugadores = [];
+                        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+                        location.reload();
+                    };
+                    botonNo.onclick = () => {
+                        div.innerHTML = "";
+                        loggedIn = false;
+                        sessionStorage.setItem("loggedIn", JSON.stringify(loggedIn));
+                        usuarioActual = "";
+                        sessionStorage.setItem("usuarioActual", usuarioActual);
+                        jugadores = [];
+                        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+                        location.reload();
+                    };
                     break;
             
                 default:
