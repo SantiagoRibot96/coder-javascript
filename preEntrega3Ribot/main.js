@@ -94,7 +94,7 @@ function buscarJugador(){
         jugadorBuscado = "";
 
         for(const item of jugadores){
-            if(item.nombre === inputs[0].value){
+            if(item.nombre === inputs[0].value.toLowerCase()){
                 jugadorBuscado = item;
             }
         }
@@ -167,7 +167,7 @@ function mostrarEquipos(){
 
     let div = document.getElementById("funciones");
     div.innerHTML = `
-    <div id = "contenedor1" style = "display: inline;"></div>
+    <div id = "contenedor1"></div>
     <div id = "contenedor2"></div>
     `;
     let contenedor1 = document.getElementById("contenedor1");
@@ -343,7 +343,7 @@ function agregarJugador(){
                 location.reload(true);
             };
         }else{
-            jugadores.push(new Jugador(nombreIngresado, posicionIngresado, parseFloat(promedioIngresado)));
+            jugadores.push(new Jugador(nombreIngresado.toLowerCase(), posicionIngresado, parseFloat(promedioIngresado)));
             sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
             funcionesH2.innerHTML = `Se pueden añadir hasta 10 jugadores. La cantidad actual de jugadores es: ${jugadores.length}`;
             formularioJugador.reset();
@@ -381,7 +381,7 @@ function eliminarJugador(){
         let inputs = e.target.children;
 
         for(const item of jugadores){
-            if(item.nombre != inputs[0].value){
+            if(item.nombre != inputs[0].value.toLowerCase()){
                 indice++;
             }else{
                 break;
@@ -406,29 +406,56 @@ function eliminarJugador(){
 
 function crearJugadoresPredeterminados(cantidad){
 
+    let div = document.getElementById("funciones");
+    div.innerHTML = "";
+    let mensaje = document.createElement("p");
+
     if(jugadores.length >= 10){
-        alert("Cantidad maxima de jugadores ingresados");
-        return;
+        mensaje.innerHTML = `
+        <h2>Se ha alcanzado la cantidad maxima de jugadores</h2>
+        <button id="botonOk">OK</button>
+        `;
+        div.append(mensaje);
+
+        let botonOk = document.getElementById("botonOk");
+
+        botonOk.onclick = () => {
+            location.reload();
+        };
+
     }
 
     let jugadoresPredeterminados = [];
 
-    jugadoresPredeterminados.push(new Jugador("Ronaldo", "DEL", 9));
-    jugadoresPredeterminados.push(new Jugador("Riquelme", "CEN", 8));
-    jugadoresPredeterminados.push(new Jugador("Messi", "DEL", 10));
-    jugadoresPredeterminados.push(new Jugador("Puyol", "DEF", 7));
-    jugadoresPredeterminados.push(new Jugador("Ramos", "DEF", 9));
-    jugadoresPredeterminados.push(new Jugador("Ribot", "CEN", 7));
-    jugadoresPredeterminados.push(new Jugador("Pepe", "DEL", 4));
-    jugadoresPredeterminados.push(new Jugador("Carlos", "DEF", 5));
-    jugadoresPredeterminados.push(new Jugador("Juan", "CEN", 2));
-    jugadoresPredeterminados.push(new Jugador("Nacho", "DEL", 6));
-    jugadoresPredeterminados.push(new Jugador("Loco", "DEF", 4));
+    jugadoresPredeterminados.push(new Jugador("ronaldo", "DEL", 9));
+    jugadoresPredeterminados.push(new Jugador("riquelme", "CEN", 8));
+    jugadoresPredeterminados.push(new Jugador("messi", "DEL", 10));
+    jugadoresPredeterminados.push(new Jugador("puyol", "DEF", 7));
+    jugadoresPredeterminados.push(new Jugador("ramos", "DEF", 9));
+    jugadoresPredeterminados.push(new Jugador("ribot", "CEN", 7));
+    jugadoresPredeterminados.push(new Jugador("pepe", "DEL", 4));
+    jugadoresPredeterminados.push(new Jugador("carlos", "DEF", 5));
+    jugadoresPredeterminados.push(new Jugador("juan", "CEN", 2));
+    jugadoresPredeterminados.push(new Jugador("nacho", "DEL", 6));
+    jugadoresPredeterminados.push(new Jugador("loco", "DEF", 4));
+
+    mensaje.innerHTML = `
+    <h2>${cantidad} de jugadores creados</h2>
+    <button id="botonOk">OK</button>
+    `;
+    div.append(mensaje);
+
+    let botonOk = document.getElementById("botonOk");
 
     while(cantidad > 0){
         jugadores.push(jugadoresPredeterminados[cantidad]);
         cantidad--;
     }
+
+    botonOk.onclick = () => {
+        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+        location.reload();
+    };
 }
 
 /* 
@@ -655,7 +682,6 @@ if (loggedIn){
         
                 case "7":
                     crearJugadoresPredeterminados(10-jugadores.length);
-                    sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
                     break;
         
                 case "8":

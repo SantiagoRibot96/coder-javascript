@@ -1,0 +1,19 @@
+#contenedor1{
+    display: flex;
+}
+
+#contenedor1 span{
+    margin-right: 3rem;
+    border: solid;
+    padding: 0.5rem;
+}
+
+#contenedor2{
+    display: flex;
+}
+
+#contenedor2 span{
+    margin-right: 3rem;
+    border: solid;
+    padding: 0.5rem;
+}
