@@ -23,6 +23,8 @@ Por dentro los jugadores se guardan en un array y se crean de forma dinamica al 
 BUG REPORT:
     -Funcion agregarJugador: Cuando haces click en finalizar se agrega un jugador de más
         --sospecho que es un comportamiento no buscado del metodo formulario.reset(). Por eso se repite en otras funciones
+    -Me econtre con el problema de que JSON no admite metodos y simplemente los ignora. Tuve que crear una funcion nueva para reemplazar al metodo de Jugador.asignar()
+
 */
 
 
@@ -57,30 +59,65 @@ class Jugador{
     }
 }
 
-function buscarJugador(){
-    nombreIngresado = prompt("Ingrese el nombre del jugador que desea consultar");
+function asignar(item){
+    if(Math.random()*10 > 5){
+        item.equipo = "A";
+    }else{
+        item.equipo = "B";
+    }
+}
 
+function buscarJugador(){
+
+    let div = document.getElementById("funciones");
+    div.innerHTML = "";
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <form id="formularioJugador">
+        <input type="text" placeholder="Nombre del jugador">
+        <input type="submit">
+        <button id="botonFin">Finalizar</button>
+    </form>
+    <P id="funcionesP"></P>
+    `;
+    div.append(mensaje);
+
+    let formularioJugador = document.getElementById("formularioJugador");
+    let botonFin = document.getElementById("botonFin");
+    let funcionesP = document.getElementById("funcionesP");
     let jugadorBuscado;
 
-    for(const item of jugadores){
-        if(item.nombre === nombreIngresado){
-            jugadorBuscado = item;
+    formularioJugador.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        let inputs = e.target.children;
+        jugadorBuscado = "";
+
+        for(const item of jugadores){
+            if(item.nombre === inputs[0].value){
+                jugadorBuscado = item;
+            }
         }
-    }
     
-    if(jugadorBuscado){
-        let mensaje = `
-            Nombre: ${jugadorBuscado.nombre}
-            Posicion: ${jugadorBuscado.posicion}
-            Promedio: ${jugadorBuscado.promedio}
-            Equipo: ${jugadorBuscado.equipo}
+        if(jugadorBuscado){
+            funcionesP.innerHTML = `
+            El jugador tiene las siguientes caracteristicas:
+            <h2>Nombre: ${jugadorBuscado.nombre}</h2>
+            <p>Posicion: ${jugadorBuscado.posicion}</p>
+            <b>Calificacion: ${jugadorBuscado.promedio}</b>
+            <b>Equipo: ${jugadorBuscado.equipo}</b>
             `;
-    
-        alert(mensaje);
-    }else{
-        alert("Jugador no encontrado");
-    }
-    
+        }else{
+            funcionesP.innerHTML = `
+            Jugador no encontrado
+            `;
+        }
+        formularioJugador.reset();
+    });
+
+    botonFin.onclick = () => {
+        location.reload();
+    }; 
 }
 
 function ordenar(){
@@ -97,37 +134,70 @@ function ordenar(){
 }
 
 function mostrarJugadores(){
-    for (const item of jugadores) {
-        let mensaje = `
-        Nombre: ${item.nombre}
-        Posicion: ${item.posicion}
-        Promedio: ${item.promedio}
-        Equipo: ${item.equipo}
-        `;
 
-        alert(mensaje);
-    }
+    let div = document.getElementById("funciones");
+    div.innerHTML = "";
+
+    jugadores.forEach((item) => {
+        let mensaje = document.createElement("div");
+        mensaje.innerHTML = `
+        <h2>Nombre: ${item.nombre}</h2>
+        <p>Posicion: ${item.posicion}</p>
+        <b>Calificacion: ${item.promedio}</b>
+        <b>Equipo: ${item.equipo}</b>
+        `;
+    
+        div.append(mensaje);
+    });
+
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <button id="botonOk">OK</button>
+    `;
+    div.append(mensaje);
+
+    botonOk.onclick = () => {
+        location.reload();
+    };
 }
 
 function mostrarEquipos(){
 
     ordenar();
 
-    let mensaje = `
-    Equipo A
-    Nombre:     ${jugadores[0].nombre}     ${jugadores[1].nombre}      ${jugadores[2].nombre}      ${jugadores[3].nombre}      ${jugadores[4].nombre}
-    Promedio:   ${promedio("A")}
+    let div = document.getElementById("funciones");
+    div.innerHTML = `
+    <div id = "contenedor1" style = "display: inline;"></div>
+    <div id = "contenedor2"></div>
     `;
+    let contenedor1 = document.getElementById("contenedor1");
+    let contenedor2 = document.getElementById("contenedor2");
 
-    alert(mensaje);
+    jugadores.forEach((item) => {
+        let mensaje = document.createElement("span");
+        mensaje.innerHTML = `
+        <h2>Nombre: ${item.nombre}</h2>
+        <p>Posicion: ${item.posicion}</p>
+        <b>Calificacion: ${item.promedio}</b>
+        <b>Equipo: ${item.equipo}</b>
+        `;
 
-    mensaje = `
-    Equipo B
-    Nombre:     ${jugadores[5].nombre}     ${jugadores[6].nombre}      ${jugadores[7].nombre}      ${jugadores[8].nombre}      ${jugadores[9].nombre}
-    Promedio:   ${promedio("B")}
+        if(item.equipo === "A"){
+            contenedor1.append(mensaje);
+        }else{
+            contenedor2.append(mensaje);
+        }
+    });
+
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <button id="botonOk">OK</button>
     `;
+    div.append(mensaje);
 
-    alert(mensaje);
+    botonOk.onclick = () => {
+        location.reload();
+    };
 }
 
 function promedio(nombreEquipo){
@@ -151,7 +221,8 @@ function hallarEquipo(){
 
     while(true){
         for (const item of jugadores) {
-            item.asignar();
+
+            asignar(item);
             
             if(item.equipo === "A"){
                 equipo++;
@@ -185,12 +256,25 @@ function hallarEquipo(){
             }
         }
     
-        equipoA = 0;
-        equipoB = 0;
+        equipo = 0;
         cantidadDEF = 0;
         cantidadDEL = 0;
         cantidadCEN = 0;
     }
+
+    let div = document.getElementById("funciones");
+    div.innerHTML = "";
+    let mensaje = document.createElement("p");
+    mensaje.innerHTML = `
+    <h2>Jugadores mezaclados con exito</h2>
+    <button id="botonOk">OK</button>
+    `;
+    div.append(mensaje);
+
+    botonOk.onclick = () => {
+        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+        location.reload();
+    };
 }
 
 function agregarJugador(){
@@ -329,17 +413,17 @@ function crearJugadoresPredeterminados(cantidad){
 
     let jugadoresPredeterminados = [];
 
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Ronaldo", "DEL", 9));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Riquelme", "CEN", 8));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Messi", "DEL", 10));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Puyol", "DEF", 7));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Ramos", "DEF", 9));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Ribot", "CEN", 7));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Pepe", "DEL", 4));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Carlos", "DEF", 5));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Juan", "CEN", 2));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Nacho", "DEL", 6));
-    jugadoresPredeterminados.push(new Jugador(usuarioActual, "Loco", "DEF", 4));
+    jugadoresPredeterminados.push(new Jugador("Ronaldo", "DEL", 9));
+    jugadoresPredeterminados.push(new Jugador("Riquelme", "CEN", 8));
+    jugadoresPredeterminados.push(new Jugador("Messi", "DEL", 10));
+    jugadoresPredeterminados.push(new Jugador("Puyol", "DEF", 7));
+    jugadoresPredeterminados.push(new Jugador("Ramos", "DEF", 9));
+    jugadoresPredeterminados.push(new Jugador("Ribot", "CEN", 7));
+    jugadoresPredeterminados.push(new Jugador("Pepe", "DEL", 4));
+    jugadoresPredeterminados.push(new Jugador("Carlos", "DEF", 5));
+    jugadoresPredeterminados.push(new Jugador("Juan", "CEN", 2));
+    jugadoresPredeterminados.push(new Jugador("Nacho", "DEL", 6));
+    jugadoresPredeterminados.push(new Jugador("Loco", "DEF", 4));
 
     while(cantidad > 0){
         jugadores.push(jugadoresPredeterminados[cantidad]);
