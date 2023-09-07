@@ -135,14 +135,14 @@ const traerProductos = (valor) => {
         setTimeout(() => {
             valor
                 ? resolve(DB)
-                : reject("No responde");
+                : reject("Timed Out");
         }, 3000);
     });
 };
 
 /////////////////////////////////////////////// CLIENTE
 
-traerProductos()
+traerProductos(true)
     .then(response => {
         response.forEach(item => {
             let div = document.createElement("div");
