@@ -78,5 +78,41 @@ eventloop: se encarga de sincronizar todo.
 // }, 1000);
 
 /* 
-promesas: 
+promesas:
+    -pending
+    -fullfy
+    -regected
 */
+
+// new Promise((resolve, reject) => {
+//     //cuerpo de la promesa
+// });
+
+// const futuro = (valor) => {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             valor ? resolve("promesa resuelta") : reject("promesa rechazada");
+//         }, 3000);
+//     });
+// };
+
+// console.log(futuro(true));
+
+/* 
+.then y .catch
+*/
+
+const futuro = (valor) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            valor
+                ? resolve("promesa resuelta")
+                : reject("promesa rechazada");
+        }, 3000);
+    });
+};
+
+futuro(true)
+    .catch((error) => console.log(error))//captura el posible error
+    .then((respuesta) => console.log(respuesta));//capturo la respuesta satisfactoria
+
