@@ -99,20 +99,63 @@ promesas:
 // console.log(futuro(true));
 
 /* 
-.then y .catch
+.then , .catch y .finally
 */
 
-const futuro = (valor) => {
+// const futuro = (valor) => {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             valor
+//                 ? resolve("promesa resuelta")
+//                 : reject("promesa rechazada");
+//         }, 3000);
+//     });
+// };
+
+// futuro(true)
+//     .catch((error) => console.log(error))//captura el posible error
+//     .then((respuesta) => console.log(respuesta))//capturo la respuesta satisfactoria
+//     .finally(() => console.log("proceso finalizado"));//cierra la promesa sea cual sea el resultado
+
+/* 
+Ejemplo servidor:
+*/
+
+/////////////////////////////////////////////// SERVIDOR
+
+const DB = [
+    { id: 1, nombre: "camisa", precio: 1000},
+    { id: 2, nombre: "pantalos", precio: 800},
+    { id: 3, nombre: "gorra", precio: 4000},
+    { id: 4, nombre: "media", precio: 600},
+];
+
+const traerProductos = (valor) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             valor
-                ? resolve("promesa resuelta")
-                : reject("promesa rechazada");
+                ? resolve(DB)
+                : reject("No responde");
         }, 3000);
     });
 };
 
-futuro(true)
-    .catch((error) => console.log(error))//captura el posible error
-    .then((respuesta) => console.log(respuesta));//capturo la respuesta satisfactoria
+/////////////////////////////////////////////// CLIENTE
 
+traerProductos()
+    .then(response => {
+        response.forEach(item => {
+            let div = document.createElement("div");
+            div.innerHTML = `
+                <h2>ID: ${item.id}</h2>
+                <p>Nombre: ${item.nombre}</p>
+                <b>$${item.precio}</b>
+            `;
+            document.body.append(div);
+        });
+    })
+    .catch(error => {
+        let div = document.createElement("div");
+        div.innerHTML = `Error, intente luego: ${error}`;
+        document.body.append(div);
+    });
