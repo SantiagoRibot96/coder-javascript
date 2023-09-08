@@ -1,65 +1,75 @@
-/* 
-librerias
-    -sweetalert2
-    -toastify
-    -luxon
+/*
+AJAX Y FETCH: peticiones al servidor
 */
 
-// let boton = document.getElementById("boton");
+// console.log(fetch(`https://jsonplaceholder.typicode.com/posts`));//es una promesa!
 
-// boton.addEventListener("click", () => {
-//     Swal.fire({
-//         icon: 'error',
-//         title: 'Oops...',
-//         text: 'Something went wrong!',
-//         footer: '<a href="">Why do I have this issue?</a>'
-//     });
-// });
+// let listado = document.getElementById("listado");
 
-// let boton = document.getElementById("boton");
+// fetch(`https://jsonplaceholder.typicode.com/posts`)
+//     .then(response => response.json())//en response tengo la info de la cabecera
+//     .then((data) => {
+//         data.forEach(publiacion => {
+//             const li = document.createElement("li");
+//             li.innerHTML = `
+//                 <h2>${publiacion.title}</h2>
+//                 <p>${publiacion.body}</p>
+//             `;
+//             listado.append(li);
+//         });
+//     })
+//     .catch(error => console.log(error));//es buena practica recibir el error por las dudas
 
-// boton.addEventListener("click", () => {
-//     Swal.fire({
-//         position: 'top-end',
-//         icon: 'success',
-//         title: 'Your work has been saved',
-//         showConfirmButton: false,
-//         timer: 1500
-//     });
-// });
+// let listado = document.getElementById("listado");
 
-// let boton = document.getElementById("boton");
+// fetch(`https://jsonplaceholder.typicode.com/posts`, {
+//     method: "POST",
+//     body: JSON.stringify({
+//         title: "Publicacion coder",
+//         body: "Nuestra primera publiacion en coder",
+//         userId: 1,
+//     }),
+//     headers: {
+//         'Content-type': 'application/json; charset=UTF-8',
+//     },
+// })
+//     .then(response => response.json())
+//     .then((data) => console.log(data))
+//     .catch(error => console.log(error));
 
-// boton.addEventListener("click", () => {
-//     Toastify({
-//         text: "This is a toast",
-//         className: "info",
-//         style: {
-//         background: "linear-gradient(to right, #00b09b, #96c93d)",
-//         }
-//     }).showToast();
-// });
+// fetch("./data.json")
+//     .then(response => response.json())
+//     .then((data) => {
+//         data.forEach(element => {
+//             let div = document.createElement("div");
+//             div.innerHTML = `
+//                 <h2>Id: ${element.id}</h2>
+//                 <p>Nombre: ${element.nombre}</p>
+//                 <b>$${element.precio}</b>
+//             `;
+//             document.body.append(div);
+//         });
+//     })
+//     .catch(error => console.log(error));
 
-// let boton = document.getElementById("boton");
+const traerDatos = async () => {
+    try {
+        const response = await fetch(`https://jsonplaceholder.typicode.com/posts`);
+        const data = await response.json();
+    
+        let listado = document.getElementById("listado");
+    
+        data.forEach(publiacion => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <h2>${publiacion.title}</h2>
+                <p>${publiacion.body}</p>
+            `;
+            listado.append(li);
+        });
+    } catch (error) {
+        console.log(error);
+    };
+};
 
-// boton.addEventListener("click", () => {
-//     Toastify({
-//         text: "This is a toast",
-//         duration: 3000,
-//         destination: "https://github.com/apvarun/toastify-js",
-//         newWindow: true,
-//         close: true,
-//         gravity: "top", // `top` or `bottom`
-//         position: "left", // `left`, `center` or `right`
-//         stopOnFocus: true, // Prevents dismissing of toast on hover
-//         style: {
-//         background: "linear-gradient(to right, #00b09b, #96c93d)",
-//         },
-//         onClick: function(){} // Callback after click
-//     }).showToast();
-// });
-
-const DateTime = luxon.DateTime;
-
-const hoy = DateTime.local(2023, 8, 26);
-console.log(hoy.c);
+traerDatos();
