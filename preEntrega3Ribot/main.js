@@ -49,14 +49,6 @@ class Jugador{
         this.promedio = promedio;
         this.equipo = false;
     }
-
-    asignar(){
-        if(Math.random()*10 > 5){
-            this.equipo = "A";
-        }else{
-            this.equipo = "B";
-        }
-    }
 }
 
 function asignar(item){
