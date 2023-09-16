@@ -33,7 +33,7 @@ quitarJugadorBoton.addEventListener("click", (e) => {
 
 
 buscarJugadorBoton.addEventListener("submit", (e) => {
-    
+
     if(!(loginPres.innerHTML.toLowerCase() === "login")){
         let inputs = e.target.children;
         buscarJugador(inputs[0].value);
