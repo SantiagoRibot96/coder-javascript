@@ -26,16 +26,21 @@ export function mostrarJugadores(){
 
     let div = document.getElementById("funcionesDiv");
     div.innerHTML = "";
+    div.className = "row container-fluid";
 
     let jugadores = JSON.parse(sessionStorage.getItem("jugadoresActual"));
 
     jugadores.forEach((item) => {
         let mensaje = document.createElement("div");
+        mensaje.className = "card text-bg-dark";
         mensaje.innerHTML = `
-        <h2>Nombre: ${item.nombre}</h2>
-        <p>Posicion: ${item.posicion}</p>
-        <b>Calificacion: ${item.promedio}</b>
-        <b>Equipo: ${item.equipo}</b>
+        <img src="./fifa-card.png" class="card-img">
+        <div class="card-img-overlay">
+            <h5 class="card-title">${item.nombre}</h5>
+            <p class="card-text">Posicion: ${item.posicion}</p>
+            <p class="card-text">Calificacion: ${item.promedio}</p>
+            <p class="card-text">Equipo: ${item.equipo}</p>  
+        </div>
         `;
     
         div.append(mensaje);
