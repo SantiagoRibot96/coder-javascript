@@ -41,7 +41,7 @@ export function mostrarJugadores(){
             <h5 class="card-title">${item.nombre}</h5>
             <p class="card-text">Posicion: ${item.posicion}</p>
             <p class="card-text">Calificacion: ${item.promedio}</p>
-            <img class="imagenEquipo" src="../imagenes/${item.equipo}.png" id="imagenEquipo${item.nombre}">  
+            <img class="imagenEquipo" src="./imagenes/${item.equipo}.png" id="imagenEquipo${item.nombre}">  
         </div>
         `;
     
@@ -128,7 +128,7 @@ export function agregarJugador(){
         mostrarJugadores();
     }
 
-    fetch("../db/jugadoresDB.json")
+    fetch("https://raw.githubusercontent.com/SantiagoRibot96/javaScript-simuladorDeFulbito/master/db/jugadoresDB.json")
         .then((response) => response.json())
             .then((data) => {
                 data.forEach((item) => {
@@ -141,7 +141,7 @@ export function agregarJugador(){
                             <h5 class="card-title">${item.nombre}</h5>
                             <p class="card-text">Posicion: ${item.posicion}</p>
                             <p class="card-text">Calificacion: ${item.promedio}</p>
-                            <img class="imagenEquipo" src="../imagenes/${item.equipo}.png" id="imagenEquipo${item.nombre}">
+                            <img class="imagenEquipo" src="./imagenes/${item.equipo}.png" id="imagenEquipo${item.nombre}">
                             <a class="btn btn-success" id="boton${item.nombre}">Agregar jugador</a>  
                         </div>
                         `;
@@ -193,7 +193,7 @@ export function quitarJugador(){
             <h5 class="card-title">${item.nombre}</h5>
             <p class="card-text">Posicion: ${item.posicion}</p>
             <p class="card-text">Calificacion: ${item.promedio}</p>
-            <img class="imagenEquipo" src="../imagenes/${item.equipo}.png">
+            <img class="imagenEquipo" src="./imagenes/${item.equipo}.png">
             <a class="btn btn-danger" id="boton${item.nombre}">Quitar jugador</a>
         </div>
         `;
