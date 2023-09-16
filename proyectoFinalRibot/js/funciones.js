@@ -1,3 +1,5 @@
+import { Jugador } from "./main.js";
+
 export function recuperarJugadores(jugadores){
 
     let usuarioActual = sessionStorage.getItem("usuarioActual");
@@ -13,13 +15,19 @@ export function recuperarJugadores(jugadores){
 }
 
 export function guardarJugadores(jugadores){
-    localStorage.setItem(usuarioActual, JSON.stringify(jugadores));
+    localStorage.setItem(sessionStorage.getItem("usuarioActual"), JSON.stringify(jugadores));
+    sessionStorage.setItem("usuarioActual", "");
+    jugadores = [];
+    sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
+
 }
 
 export function mostrarJugadores(){
 
-    let div = document.getElementById("funciones");
+    let div = document.getElementById("funcionesDiv");
     div.innerHTML = "";
+
+    let jugadores = JSON.parse(sessionStorage.getItem("jugadoresActual"));
 
     jugadores.forEach((item) => {
         let mensaje = document.createElement("div");
@@ -32,36 +40,36 @@ export function mostrarJugadores(){
     
         div.append(mensaje);
     });
-
-    let mensaje = document.createElement("p");
-    mensaje.innerHTML = `
-    <button id="botonOk">OK</button>
-    `;
-    div.append(mensaje);
-
-    botonOk.onclick = () => {
-        location.reload();
-    };
 }
 
 export function agregarJugador(){
 
-    let div = document.getElementById("funciones");
+    let jugadores = JSON.parse(sessionStorage.getItem("jugadoresActual"));
+
+    jugadores
+        ? false
+        : jugadores = [];
+
+    let div = document.getElementById("funcionesDiv");
     div.innerHTML = "";
     let mensaje = document.createElement("p");
     mensaje.innerHTML = `
     <h2 id="funcionesH2">Se pueden añadir hasta 10 jugadores. La cantidad actual de jugadores es: ${jugadores.length}</h2>
-    <form id="formularioJugador">
-        <input type="text" placeholder="Nombre">
-        <select id="opcionesJugador">
+    <form id="formularioJugador" class="row">
+        <input type="text" class="form-control col" placeholder="Nombre">
+
+        <select id="opcionesJugador" class="form-select col" aria-label="Default select example">
             <option selected>Elija una opcion...</option>
             <option value="DEF">DEF</option>
             <option value="CEN">CEN</option>
             <option value="DEL">DEL</option>
         </select>
-        <input type="text" placeholder="Calificacion">
-        <input type="submit">
-        <button id="botonFin">Finalizar</button>
+
+        <input type="text" class="form-control col" placeholder="Calificacion">
+        <div class="col">
+            <input type="submit" class="btn btn-primary">
+            <button id="botonFin" class="btn btn-danger">Finalizar</button>
+        </div>
     </form>
     `;
     div.append(mensaje);
@@ -70,7 +78,7 @@ export function agregarJugador(){
         mensaje.innerHTML = `
         <h2>Se pueden añadir hasta 10 jugadores.La cantidad actual de jugadores es: ${jugadores.length}</h2>
         <h3>Se ha alcanzado la cantidad maxima de jugadores</h3>
-        <button id="botonOk">OK</button>
+        <button id="botonOk" class="btn btn-primary">OK</button>
         `;
         div.append(mensaje);
 
@@ -118,7 +126,7 @@ export function agregarJugador(){
     });
 
     botonFin.onclick = () => {
-        location.reload();
+        mostrarJugadores();
     };
 }
 

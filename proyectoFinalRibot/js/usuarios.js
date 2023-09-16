@@ -4,7 +4,6 @@ import { mostrarJugadores } from "./funciones.js"
 
 const loginPres = document.getElementById("login");
 let usuariosStorage = JSON.parse(localStorage.getItem("usuarios"));
-let jugadores = [];
 
 loginPres.addEventListener("click", (e) => {
     if(loginPres.innerHTML.toLowerCase() === "login"){
@@ -15,6 +14,8 @@ loginPres.addEventListener("click", (e) => {
 });
 
 function login(){
+
+    let jugadores = [];
 
     usuariosStorage
         ? false
@@ -32,16 +33,6 @@ function login(){
         })
         .then((result) => {
             if (result.isConfirmed && result.value){
-                if(usuariosStorage === null){
-                    usuariosStorage.push(result.value);
-                    sessionStorage.setItem("usuarioActual", result.value);
-                    localStorage.setItem("usuarios", JSON.stringify(usuariosStorage));
-                    let jugadoresTemp = [];
-                    sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadoresTemp));
-                    Swal.fire({
-                        title: `Bienvenido ${result.value}. Eres el primero en entrar`,
-                    });
-                }else{
                     const usuarioActual = usuariosStorage.find((usuario) => usuario === result.value);
 
                     if(usuarioActual){
@@ -57,30 +48,32 @@ function login(){
                             .then((result) => {
                                 if (result.isConfirmed) {
                                     recuperarJugadores(jugadores);
-                                    Swal.fire(
-                                    'Jugadores recuperados!',
-                                    )
                                 } else {
                                     jugadores = [];
                                     sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
                                 }
+                                mostrarJugadores();
                             })
                     }else{
                         usuariosStorage.push(result.value);
                         sessionStorage.setItem("usuarioActual", result.value);
                         localStorage.setItem("usuarios", JSON.stringify(usuariosStorage));
+                        let jugadoresTemp = [];
+                        sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadoresTemp));
                         Swal.fire({
                             title: `Bienvenido ${result.value}. Es la primera vez que entras`,
                         })
+                        mostrarJugadores();
                     }
-                }
             loginPres.innerHTML = `Logout`;
-            mostrarJugadores()
             }
         })
 }
 
 function logout(){
+    
+    let jugadores = JSON.parse(sessionStorage.getItem("jugadoresActual"));
+
     Swal.fire({
         title: 'Desea guardar antes de salir?',
         showDenyButton: true,
@@ -92,18 +85,15 @@ function logout(){
     .then((result) => {
         if (result.isConfirmed) {
             guardarJugadores(jugadores);
-            sessionStorage.setItem("usuarioActual", "");
-            jugadores = [];
-            sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
             loginPres.innerHTML = `Login`;
-            let div = document.getElementById("funciones");
+            let div = document.getElementById("funcionesDiv");
             div.innerHTML = "";
         } else if (result.isDenied) {
             sessionStorage.setItem("usuarioActual", "");
             jugadores = [];
             sessionStorage.setItem("jugadoresActual", JSON.stringify(jugadores));
             loginPres.innerHTML = `Login`;
-            let div = document.getElementById("funciones");
+            let div = document.getElementById("funcionesDiv");
             div.innerHTML = "";
         }
     })

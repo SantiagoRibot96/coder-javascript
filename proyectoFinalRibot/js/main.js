@@ -1,8 +1,8 @@
-import { agregarJugador } from "./funciones";
-import { quitarJugador } from "./funciones";
-import { buscarJugador } from "./funciones";
+import { agregarJugador } from "./funciones.js";
+import { quitarJugador } from "./funciones.js";
+import { buscarJugador } from "./funciones.js";
 
-class Jugador{
+export class Jugador{
     constructor(nombre, posicion, promedio){
         this.nombre = nombre;
         this.posicion = posicion;
@@ -11,20 +11,31 @@ class Jugador{
     }
 }
 
-const agregarJugador = document.getElementById("agregarJugador");
-const quitarJugador = document.getElementById("quitarJugador");
-const buscarJugador = document.getElementById("buscarJugador");
+const loginPres = document.getElementById("login");
 
-agregarJugador.addEventListener("click", (e) => {
-    agregarJugador();
+const agregarJugadorBoton = document.getElementById("agregarJugador");
+const quitarJugadorBoton = document.getElementById("quitarJugador");
+const buscarJugadorBoton = document.getElementById("buscarJugador");
+
+agregarJugadorBoton.addEventListener("click", (e) => {
+
+    if(!(loginPres.innerHTML.toLowerCase() === "login")){
+        agregarJugador();
+    }
 });
 
-quitarJugador.addEventListener("click", (e) => {
-    quitarJugador();
+quitarJugadorBoton.addEventListener("click", (e) => {
+    
+    if(!(loginPres.innerHTML.toLowerCase() === "login")){
+        quitarJugador();
+    }
 });
 
 
-buscarJugador.addEventListener("submit", (e) => {
-    let inputs = e.target.children;
-    buscarJugador(inputs[0].value);
+buscarJugadorBoton.addEventListener("submit", (e) => {
+    
+    if(!(loginPres.innerHTML.toLowerCase() === "login")){
+        let inputs = e.target.children;
+        buscarJugador(inputs[0].value);
+    }
 });
