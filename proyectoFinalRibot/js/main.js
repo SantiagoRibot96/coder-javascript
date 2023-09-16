@@ -1,6 +1,7 @@
 import { agregarJugador } from "./funciones.js";
 import { quitarJugador } from "./funciones.js";
 import { buscarJugador } from "./funciones.js";
+import { armarEquipo } from "./funciones.js";
 
 export class Jugador{
     constructor(nombre, posicion, promedio){
@@ -16,6 +17,7 @@ const loginPres = document.getElementById("login");
 const agregarJugadorBoton = document.getElementById("agregarJugador");
 const quitarJugadorBoton = document.getElementById("quitarJugador");
 const buscarJugadorBoton = document.getElementById("buscarJugador");
+const armarEquipoBoton = document.getElementById("armarEquipo");
 
 agregarJugadorBoton.addEventListener("click", (e) => {
 
@@ -39,3 +41,10 @@ buscarJugadorBoton.addEventListener("submit", (e) => {
         buscarJugador(inputs[0].value);
     }
 });
+
+armarEquipoBoton.addEventListener("click", () => {
+
+    if(!(loginPres.innerHTML.toLowerCase() === "login")){
+        armarEquipo();
+    }
+})

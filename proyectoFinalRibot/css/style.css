@@ -1,6 +1,12 @@
+.row{
+    display: flex;
+    justify-content: center;
+}
+
 .card {
-    height: auto;
-    width: 300px;
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    padding: 0;
 }
 
 .card-title {
@@ -17,4 +23,17 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 2rem;
+}
+
+.imagenArmarEquipo {
+    width: 100px;
+    height: auto;
+    margin-left: 2rem;
+}
+
+.imagenEquipo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    color: black;
 }
