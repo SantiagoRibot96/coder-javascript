@@ -1,0 +1,39 @@
+.row{
+    display: flex;
+    justify-content: center;
+}
+
+.card {
+    margin-left: 2rem;
+    margin-bottom: 2rem;
+    padding: 0;
+}
+
+.card-title {
+    color: black;
+}
+
+.card-text {
+    color: black;
+}
+
+.card-img-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.imagenArmarEquipo {
+    width: 100px;
+    height: auto;
+    margin-left: 2rem;
+}
+
+.imagenEquipo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 1.5rem;
+    color: black;
+}

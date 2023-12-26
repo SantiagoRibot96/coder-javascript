@@ -431,6 +431,8 @@ function crearJugadoresPredeterminados(cantidad){
     jugadoresPredeterminados.push(new Jugador("nacho", "DEL", 6));
     jugadoresPredeterminados.push(new Jugador("loco", "DEF", 4));
 
+    console.log(JSON.stringify(jugadoresPredeterminados));
+
     mensaje.innerHTML = `
     <h2>${cantidad} de jugadores creados</h2>
     <button id="botonOk">OK</button>

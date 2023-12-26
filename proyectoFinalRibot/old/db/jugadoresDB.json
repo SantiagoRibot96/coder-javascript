@@ -1,0 +1,13 @@
+[
+    {"nombre":"ronaldo","posicion":"DEL","promedio":9,"equipo":false},
+    {"nombre":"riquelme","posicion":"CEN","promedio":8,"equipo":false},
+    {"nombre":"messi","posicion":"DEL","promedio":10,"equipo":false},
+    {"nombre":"puyol","posicion":"DEF","promedio":7,"equipo":false},
+    {"nombre":"ramos","posicion":"DEF","promedio":9,"equipo":false},
+    {"nombre":"ribot","posicion":"CEN","promedio":7,"equipo":false},
+    {"nombre":"pepe","posicion":"DEL","promedio":4,"equipo":false},
+    {"nombre":"carlos","posicion":"DEF","promedio":5,"equipo":false},
+    {"nombre":"juan","posicion":"CEN","promedio":2,"equipo":false},
+    {"nombre":"nacho","posicion":"DEL","promedio":6,"equipo":false},
+    {"nombre":"loco","posicion":"DEF","promedio":4,"equipo":false}
+]
